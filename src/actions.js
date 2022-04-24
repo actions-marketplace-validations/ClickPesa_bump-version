@@ -102,6 +102,7 @@ const run = async () => {
     }
     try {
       if (commits != "") {
+        console.log("here");
         gulp
           .src("./changelog.md")
           .pipe(gap.prependText(commits))
@@ -129,7 +130,7 @@ const run = async () => {
           repo: context.payload?.repository?.name,
         }
       );
-      console.log("test delete branch", deleteBranch?.data);
+      console.log("test delete branch", deleteBranch);
     } catch (error) {
       console.log("error", error?.message);
     }
