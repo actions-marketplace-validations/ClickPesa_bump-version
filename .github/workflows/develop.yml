@@ -1,0 +1,21 @@
+name: on merging to develop
+
+on:
+   push:
+     branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: npm install
+
+      - name: automate creating pr to staging 
+        uses: bmsteven/create_pr@1.0.6
+        with:
+          GITHUB_TOKEN: ${{secrets.TOKEN}}
+          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+          DESTINATION_BRANCH: staging

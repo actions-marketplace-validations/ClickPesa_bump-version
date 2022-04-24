@@ -1,0 +1,25 @@
+name: on pr to staging
+
+on:
+   pull_request:
+     branches: [ staging ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: eod actions
+        uses: bmsteven/eod-actions@1.0.2
+        with: 
+          GITHUB_TOKEN: ${{secrets.TOKEN}}
+          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+          SLACK_WEBHOOK_REVIEW_URL: ${{secrets.SLACK_WEBHOOK_REVIEW_URL}}
+          TARGET_BRANCH: staging
+          DESTINATION_BRANCH: main
