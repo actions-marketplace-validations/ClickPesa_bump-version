@@ -121,3 +121,5 @@ const run = async () => {
 };
 
 run();
+
+// curl -s -X DELETE -u username:${{secrets.GITHUB_TOKEN}} https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ github.head_ref }}
