@@ -8,7 +8,7 @@ const gap = require("gulp-append-prepend");
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 const SLACK_WEBHOOK_URL = core.getInput("SLACK_WEBHOOK_URL");
 const TARGET_BRANCH = core.getInput("TARGET_BRANCH");
-const DESTINATION_BRANCH = core.getInput("DESTINATION_BRANCH");
+const APP_NAME = core.getInput("APP_NAME");
 const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
@@ -125,9 +125,7 @@ const run = async () => {
       const branches = await octokit.rest.repos.listBranches({
         owner: context.payload?.repository?.owner?.login,
         repo: context.payload?.repository?.name,
-      });
-      console.log(branches?.data?.find((el) => el?.name === branch_to_delete));
-      // if exists delete
+      }); // if exists delete
       if (branches?.data?.find((el) => el?.name === branch_to_delete)) {
         await octokit.request(
           `DELETE /repos/${context.payload?.repository?.full_name}/git/refs/heads/${branch_to_delete}`,
@@ -141,6 +139,64 @@ const run = async () => {
     } catch (error) {
       console.log("error", error?.message);
     }
+    // send slack notification
+    let newDate = new Date();
+    newDate.setTime(new Date(newDate).getTime());
+    let dateString = newDate.toDateString();
+    let timeString = newDate.toLocaleTimeString();
+    const RELEASE_DATE = dateString + " " + timeString;
+    commits = commits?.split("*").join(">");
+    console.log(commits);
+    let options = {
+      blocks: [
+        {
+          type: "header",
+          text: {
+            type: "plain_text",
+            text: `🚀 New version released on *${
+              APP_NAME ?? "Engineering-blog"
+            }*`,
+            emoji: true,
+          },
+        },
+        {
+          type: "context",
+          elements: [
+            {
+              text: ` *${
+                APP_NAME ?? "Engineering-blog"
+              }*  |  *${RELEASE_DATE}* `,
+              type: "mrkdwn",
+            },
+          ],
+        },
+        {
+          type: "divider",
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `*<https://github.com/${context.payload?.repository?.full_name}/ | ${new_version} >*`,
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `${commits}`,
+          },
+        },
+      ],
+    };
+    axios
+      .post(SLACK_WEBHOOK_URL, JSON.stringify(options))
+      .then((response) => {
+        console.log("SUCCEEDED: Sent slack webhook", response.data);
+      })
+      .catch((error) => {
+        console.log("FAILED: Send slack webhook", error);
+      });
   }
 };
 
