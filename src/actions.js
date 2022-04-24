@@ -96,7 +96,6 @@ const run = async () => {
               ? "* " + e.commit.message
               : commits + "\n\n" + "* " + e.commit.message;
       });
-      console.log("commits", commits);
     } catch (error) {
       console.log("fetch commits", error?.message);
     }
@@ -146,7 +145,6 @@ const run = async () => {
     let timeString = newDate.toLocaleTimeString();
     const RELEASE_DATE = dateString + " " + timeString;
     commits = commits?.split("*").join(">");
-    console.log(commits);
     let options = {
       blocks: [
         {
