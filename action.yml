@@ -1,4 +1,4 @@
-name: 'intermediate branch automations'
+name: 'bum app version'
 description: 'automate merge and pull request creation in intermediate branch'
 author: 'Benedict Steven'
 
