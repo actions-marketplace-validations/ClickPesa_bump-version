@@ -13,14 +13,14 @@ const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
 const run = async () => {
-  console.log("context", context?.payload);
+  // console.log("context", context?.payload);
   // fetch the latest pull request merged in target branch
   try {
     const latestPull = await octokit.rest.pulls.list({
       owner: context.payload?.repository?.owner?.login,
       repo: context.payload?.repository?.name,
       base: TARGET_BRANCH,
-      status: "merged",
+      state: "closed",
     });
     console.log(latestPull?.data);
   } catch (error) {
@@ -53,7 +53,7 @@ const run = async () => {
   }
 
   let new_version = splitString.join(".");
-  process.env.VERSION = splitString.join(".");
+  // process.env.VERSION = splitString.join(".");
   // save version
   if (new_version) {
     try {
