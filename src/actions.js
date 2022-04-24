@@ -88,6 +88,7 @@ const run = async () => {
       });
       console.log("commits", commits);
     } catch (error) {
+      console.log("whyyyyy", context.payload?.number, context.payload);
       console.log("fetch commits", error?.message);
     }
     try {
