@@ -61,6 +61,7 @@ const run = async () => {
 
     // update changelog
     let commits = "";
+    console.log(context.payload?.number);
     try {
       // fetch commits from pull request
       const pull_commits = await octokit.request(
