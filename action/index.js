@@ -62292,7 +62292,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /***/ ((module) => {
 
 "use strict";
-module.exports = {"i8":"1.1.0"};
+module.exports = {"i8":"1.1.1"};
 
 /***/ })
 
@@ -62418,22 +62418,8 @@ const run = async () => {
           })
         )
         .pipe(gulp.dest("./"));
-      if (commits != "") {
-        gulp
-          .src(["./changelog.md"])
-          .pipe(gap.prependText(commits))
-          .pipe(gap.prependText(`# ${new_version}`))
-          .pipe(gulp.dest("./"));
-      } else {
-        console.log("no commit messages");
-        gulp
-          .src(["./changelog.md"])
-          .pipe(gap.prependText("* No message for these changes"))
-          .pipe(gap.prependText(`# ${new_version}`))
-          .pipe(gulp.dest("./"));
-      }
     } catch (error) {
-      console.log("up version error", error.message);
+      console.log("up v", error.message);
     }
 
     // update changelog
@@ -62464,6 +62450,24 @@ const run = async () => {
       console.log("commits", commits);
     } catch (error) {
       console.log("fetch commits", error?.message);
+    }
+    try {
+      if (commits != "") {
+        gulp
+          .src(["./changelog.md"])
+          .pipe(gap.prependText(commits))
+          .pipe(gap.prependText(`# ${new_version}`))
+          .pipe(gulp.dest("./"));
+      } else {
+        console.log("no commit messages");
+        gulp
+          .src(["./changelog.md"])
+          .pipe(gap.prependText("* No message for these changes"))
+          .pipe(gap.prependText(`# ${new_version}`))
+          .pipe(gulp.dest("./"));
+      }
+    } catch (error) {
+      console.log("changelog", error?.message);
     }
     // delete branch
     let branch_to_delete = pull?.head?.ref;
