@@ -9,12 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
       - uses: actions/checkout@v2
         with:
           ref: develop
@@ -25,6 +19,11 @@ jobs:
           git config --global user.email "bmsteve96@gmail.com"
           git config --global user.name "Benedict Steven"
           git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
+      - name: Build
+        run: npm install
+
+      - name: Build
+        run: npm run build
 
       - name: eod actions
         uses: ./
