@@ -54,42 +54,46 @@ const run = async () => {
       )
       .pipe(gulp.dest("./"));
 
-    // fetch commits from pull request
-    const pull_commits = await octokit.request(
-      `GET /repos/${context.payload?.repository?.full_name}/pulls/${context.payload?.number}/commits`,
-      {
-        owner: context.payload?.repository?.owner?.login,
-        repo: context.payload?.repository?.name,
-        pull_number: context.payload?.number,
+    // update changelog
+    try {
+      // fetch commits from pull request
+      const pull_commits = await octokit.request(
+        `GET /repos/${context.payload?.repository?.full_name}/pulls/${context.payload?.number}/commits`,
+        {
+          owner: context.payload?.repository?.owner?.login,
+          repo: context.payload?.repository?.name,
+          pull_number: context.payload?.number,
+        }
+      );
+
+      const commits = "";
+
+      pull_commits?.data?.forEach((e, i) => {
+        if (
+          !e?.commit?.message.includes("Merge") &&
+          !e?.commit?.message.includes("Merged") &&
+          !e?.commit?.message.includes("skip") &&
+          !e?.commit?.message.includes("Skip")
+        )
+          commits =
+            i === 0
+              ? "* " + e.commit.message
+              : commits + "\n\n" + "* " + e.commit.message;
+      });
+      console.log(commits);
+      if (commits != "") {
+        gulp
+          .src("../changelog.md")
+          .pipe(gap.prependText(commits))
+          .pipe(gap.prependText(`# ${new_version}`))
+          .pipe(gulp.dest("./"));
+      } else {
+        console.log("no commit messages");
       }
-    );
-
-    const commits = "";
-
-    pull_commits?.data?.forEach((e, i) => {
-      if (
-        !e?.commit?.message.includes("Merge") &&
-        !e?.commit?.message.includes("Merged") &&
-        !e?.commit?.message.includes("skip") &&
-        !e?.commit?.message.includes("Skip")
-      )
-        commits =
-          i === 0
-            ? "* " + e.commit.message
-            : commits + "\n\n" + "* " + e.commit.message;
-    });
-    console.log(commits);
-    if (commits != "") {
-      gulp
-        .src("../changelog.md")
-        .pipe(gap.prependText(commits))
-        .pipe(gap.prependText(`# ${new_version}`))
-        .pipe(gulp.dest("./"));
-    } else {
-      console.log("no commit messages");
+    } catch (error) {
+      console.log(err?.message);
     }
   }
-  // update changelog
 };
 
 run();
