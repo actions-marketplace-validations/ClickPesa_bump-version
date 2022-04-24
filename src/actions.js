@@ -45,17 +45,22 @@ const run = async () => {
   console.log(" new version : ", new_version);
   // save version
   if (new_version) {
-    gulp
-      .src(["./package.json"])
-      .pipe(
-        jsonModify({
-          key: "version",
-          value: new_version,
-        })
-      )
-      .pipe(gulp.dest("./"));
+    try {
+      gulp
+        .src(["./package.json"])
+        .pipe(
+          jsonModify({
+            key: "version",
+            value: new_version,
+          })
+        )
+        .pipe(gulp.dest("./"));
+    } catch (error) {
+      console.log("up v", error.message);
+    }
 
     // update changelog
+    let commits = "";
     try {
       // fetch commits from pull request
       const pull_commits = await octokit.request(
@@ -66,8 +71,6 @@ const run = async () => {
           pull_number: context.payload?.number,
         }
       );
-
-      const commits = "";
 
       pull_commits?.data?.forEach((e, i) => {
         if (
@@ -82,6 +85,10 @@ const run = async () => {
               : commits + "\n\n" + "* " + e.commit.message;
       });
       console.log("commits", commits);
+    } catch (error) {
+      console.log("fetch commits", error?.message);
+    }
+    try {
       if (commits != "") {
         gulp
           .src("./changelog.md")
@@ -92,7 +99,7 @@ const run = async () => {
         console.log("no commit messages");
       }
     } catch (error) {
-      console.log(error?.message);
+      console.log("changelog", error?.message);
     }
   }
 };
