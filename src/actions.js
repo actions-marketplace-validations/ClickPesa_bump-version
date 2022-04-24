@@ -99,7 +99,7 @@ const run = async () => {
         console.log("no commit messages");
       }
     } catch (error) {
-      console.log("changelog error", error?.message);
+      console.log("changelog", error?.message);
     }
   }
 };
