@@ -1,3 +1,5 @@
+# 1.1.3
+* test getting branches list
 # 1.1.2
 * test new version
 # 1.1.0

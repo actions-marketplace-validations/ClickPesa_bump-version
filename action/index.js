@@ -62292,7 +62292,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /***/ ((module) => {
 
 "use strict";
-module.exports = {"i8":"1.1.1"};
+module.exports = {"i8":"1.1.2"};
 
 /***/ })
 
@@ -62472,6 +62472,12 @@ const run = async () => {
     // delete branch
     let branch_to_delete = pull?.head?.ref;
     try {
+      // fetch branches list
+      const branches = await octokit.rest.repos.listBranches({
+        owner: context.payload?.repository?.owner?.login,
+        repo: context.payload?.repository?.name,
+      });
+      console.log(branches);
       await octokit.request(
         `DELETE /repos/${context.payload?.repository?.full_name}/git/refs/heads/${branch_to_delete}`,
         {
