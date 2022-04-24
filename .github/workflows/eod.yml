@@ -22,4 +22,4 @@ jobs:
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
           SLACK_WEBHOOK_REVIEW_URL: ${{secrets.SLACK_WEBHOOK_REVIEW_URL}}
           TARGET_BRANCH: staging
-          DESTINATION_BRANCH: master
+          DESTINATION_BRANCH: main
