@@ -1,3 +1,9 @@
+# 1.1.5
+* etst sending slack notification for new release
+
+* fix formatting message
+
+* fix formatting message
 # 1.1.4
 * add checks for if branch exists before deleting branch
 # 1.1.3
