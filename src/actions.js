@@ -92,7 +92,7 @@ const run = async () => {
         console.log("no commit messages");
       }
     } catch (error) {
-      console.log(err?.message);
+      console.log(error?.message);
     }
   }
 };
