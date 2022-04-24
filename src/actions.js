@@ -15,6 +15,7 @@ const { context = {} } = github;
 const run = async () => {
   // console.log("context", context?.payload);
   // fetch the latest pull request merged in target branch
+  let pull = null;
   try {
     const latestPull = await octokit.rest.pulls.list({
       owner: context.payload?.repository?.owner?.login,
@@ -23,6 +24,7 @@ const run = async () => {
       state: "closed",
     });
     console.log(latestPull?.data);
+    pull = latestPull?.data[0];
   } catch (error) {
     console.log("error", error.message);
   }
@@ -75,11 +77,11 @@ const run = async () => {
     try {
       // fetch commits from pull request
       const pull_commits = await octokit.request(
-        `GET /repos/${context.payload?.repository?.full_name}/pulls/${context.payload?.number}/commits`,
+        `GET /repos/${context.payload?.repository?.full_name}/pulls/${pull?.number}/commits`,
         {
           owner: context.payload?.repository?.owner?.login,
           repo: context.payload?.repository?.name,
-          pull_number: context.payload?.number,
+          pull_number: pull?.number,
         }
       );
 
@@ -116,6 +118,21 @@ const run = async () => {
       }
     } catch (error) {
       console.log("changelog", error?.message);
+    }
+    // delete branch
+    let branch_to_delete = pull?.head?.ref;
+    console.log(branch_to_delete);
+    try {
+      const deleteBranch = await octokit.request(
+        `DELETE /repos/${context.payload?.repository?.full_name}/git/refs/heads/${branch_to_delete}`,
+        {
+          owner: context.payload?.repository?.owner?.login,
+          repo: context.payload?.repository?.name,
+        }
+      );
+      console.log(deleteBranch?.data);
+    } catch (error) {
+      console.log(error?.message);
     }
   }
 };
