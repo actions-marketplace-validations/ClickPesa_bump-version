@@ -1,3 +1,5 @@
+# 1.0.9
+* test delete branch
 # 1.0.8
 * No message for these changes
 # 1.0.7
