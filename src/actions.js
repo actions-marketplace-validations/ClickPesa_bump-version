@@ -102,7 +102,6 @@ const run = async () => {
     }
     try {
       if (commits != "") {
-        console.log("here");
         gulp
           .src(["./changelog.md"])
           .pipe(gap.prependText(commits))
