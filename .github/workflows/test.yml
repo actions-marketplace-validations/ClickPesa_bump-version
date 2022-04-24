@@ -26,6 +26,10 @@ jobs:
           TARGET_BRANCH: main
           DESTINATION_BRANCH: develop
 
+      - uses: actions/checkout@v2
+        with:
+          ref: develop
+
       #  push changes to develop
       - name: update develop branch
         run: |
