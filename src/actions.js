@@ -145,6 +145,7 @@ const run = async () => {
     let dateString = newDate.toDateString();
     let timeString = newDate.toLocaleTimeString();
     const RELEASE_DATE = dateString + " " + timeString;
+    commits = commits?.split("*").join(">");
     let options = {
       blocks: [
         {
