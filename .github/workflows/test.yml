@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: develop
       - name: Build
         run: npm install
 
@@ -25,6 +23,10 @@ jobs:
           # SLACK_WEBHOOK_REVIEW_URL: ${{secrets.SLACK_WEBHOOK_REVIEW_URL}}
           TARGET_BRANCH: main
           DESTINATION_BRANCH: develop
+
+      - uses: actions/checkout@v2
+        with:
+          ref: develop
 
       #  push changes to develop
       - name: update develop branch
