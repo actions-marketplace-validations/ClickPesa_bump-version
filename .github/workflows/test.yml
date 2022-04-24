@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: my-branch
+          ref: develop
       - name: Build
         run: npm install
 
@@ -30,7 +30,6 @@ jobs:
       - name: update develop branch
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
-          git checkout develop
           git add package.json
           git add changelog.md
           git commit -m "Skip CI"
