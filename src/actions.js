@@ -2,6 +2,7 @@ const axios = require("axios");
 const github = require("@actions/github");
 const core = require("@actions/core");
 const gulp = require("gulp");
+const jsonModify = require("gulp-json-modify");
 
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 const SLACK_WEBHOOK_URL = core.getInput("SLACK_WEBHOOK_URL");
@@ -11,7 +12,6 @@ const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
 const run = async () => {
-  console.log("run", context?.payload);
   // bump version
   let ver = require("../package.json").version; //version defined in the package.json file
   console.log("current version: ", ver);
@@ -41,7 +41,7 @@ const run = async () => {
 
   let new_version = splitString.join(".");
   process.env.VERSION = splitString.join(".");
-  console.log(" new version : ", process.env.VERSION, new_version);
+  console.log(" new version : ", new_version);
   // save version
   if (new_version) {
     gulp

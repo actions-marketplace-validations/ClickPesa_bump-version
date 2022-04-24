@@ -1,4 +1,4 @@
-name: on pr to staging
+name: on pr to default branch
 
 on:
    push:
