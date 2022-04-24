@@ -13,10 +13,9 @@ const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
 const run = async () => {
-  console.log("whyyyyy", context.payload?.number, context.payload);
+  console.log("context", context);
   // bump version
   let ver = require("../package.json").version; //version defined in the package.json file
-  console.log("current version: ", ver);
   let splitString = ver.split(".", 3);
 
   let majorVersion = splitString[0].split('"', 1);
@@ -43,7 +42,6 @@ const run = async () => {
 
   let new_version = splitString.join(".");
   process.env.VERSION = splitString.join(".");
-  console.log(" new version : ", new_version);
   // save version
   if (new_version) {
     try {
@@ -101,6 +99,11 @@ const run = async () => {
           .pipe(gulp.dest("./"));
       } else {
         console.log("no commit messages");
+        gulp
+          .src("./changelog.md")
+          .pipe(gap.prependText("* No message for these changes"))
+          .pipe(gap.prependText(`# ${new_version}`))
+          .pipe(gulp.dest("./"));
       }
     } catch (error) {
       console.log("changelog", error?.message);
