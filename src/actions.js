@@ -3,6 +3,7 @@ const github = require("@actions/github");
 const core = require("@actions/core");
 const gulp = require("gulp");
 const jsonModify = require("gulp-json-modify");
+const gap = require("gulp-append-prepend");
 
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 const SLACK_WEBHOOK_URL = core.getInput("SLACK_WEBHOOK_URL");
@@ -45,7 +46,7 @@ const run = async () => {
   // save version
   if (new_version) {
     gulp
-      .src(["../package.json"])
+      .src(["./package.json"])
       .pipe(
         jsonModify({
           key: "version",
@@ -80,10 +81,10 @@ const run = async () => {
               ? "* " + e.commit.message
               : commits + "\n\n" + "* " + e.commit.message;
       });
-      console.log(commits);
+      console.log("commits", commits);
       if (commits != "") {
         gulp
-          .src("../changelog.md")
+          .src("./changelog.md")
           .pipe(gap.prependText(commits))
           .pipe(gap.prependText(`# ${new_version}`))
           .pipe(gulp.dest("./"));
