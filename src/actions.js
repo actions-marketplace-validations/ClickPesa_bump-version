@@ -14,6 +14,18 @@ const { context = {} } = github;
 
 const run = async () => {
   console.log("context", context?.payload);
+  // fetch the latest pull request merged in target branch
+  try {
+    const latestPull = await octokit.rest.pulls.list({
+      owner: context.payload?.repository?.owner?.login,
+      repo: context.payload?.repository?.name,
+      base: TARGET_BRANCH,
+      status: "merged",
+    });
+    console.log(latestPull?.data);
+  } catch (error) {
+    console.log("error", error.message);
+  }
   // bump version
   let ver = require("../package.json").version; //version defined in the package.json file
   let splitString = ver.split(".", 3);
@@ -60,9 +72,7 @@ const run = async () => {
 
     // update changelog
     let commits = "";
-    console.log("whyyyyy", context.payload?.number, context.payload);
     try {
-      console.log("whyyyyy", context.payload?.number, context.payload);
       // fetch commits from pull request
       const pull_commits = await octokit.request(
         `GET /repos/${context.payload?.repository?.full_name}/pulls/${context.payload?.number}/commits`,
@@ -87,7 +97,6 @@ const run = async () => {
       });
       console.log("commits", commits);
     } catch (error) {
-      console.log("whyyyyy", context.payload?.number, context.payload);
       console.log("fetch commits", error?.message);
     }
     try {
@@ -112,3 +121,5 @@ const run = async () => {
 };
 
 run();
+
+// curl -s -X DELETE -u username:${{secrets.GITHUB_TOKEN}} https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ github.head_ref }}
