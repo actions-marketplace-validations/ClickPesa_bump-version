@@ -104,14 +104,14 @@ const run = async () => {
       if (commits != "") {
         console.log("here");
         gulp
-          .src("./changelog.md")
+          .src(["./changelog.md"])
           .pipe(gap.prependText(commits))
           .pipe(gap.prependText(`# ${new_version}`))
           .pipe(gulp.dest("./"));
       } else {
         console.log("no commit messages");
         gulp
-          .src("./changelog.md")
+          .src(["./changelog.md"])
           .pipe(gap.prependText("* No message for these changes"))
           .pipe(gap.prependText(`# ${new_version}`))
           .pipe(gulp.dest("./"));
@@ -121,16 +121,15 @@ const run = async () => {
     }
     // delete branch
     let branch_to_delete = pull?.head?.ref;
-    console.log(branch_to_delete);
     try {
-      const deleteBranch = await octokit.request(
+      await octokit.request(
         `DELETE /repos/${context.payload?.repository?.full_name}/git/refs/heads/${branch_to_delete}`,
         {
           owner: context.payload?.repository?.owner?.login,
           repo: context.payload?.repository?.name,
         }
       );
-      console.log("test delete branch", deleteBranch);
+      console.log("branch deleted successfully");
     } catch (error) {
       console.log("error", error?.message);
     }

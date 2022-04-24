@@ -38,5 +38,6 @@ jobs:
         run: |
           git add package.json
           git add changelog.md
+          git add actions
           git commit -m "Skip CI"
           git push
