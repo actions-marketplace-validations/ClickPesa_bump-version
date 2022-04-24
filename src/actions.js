@@ -23,7 +23,6 @@ const run = async () => {
       base: TARGET_BRANCH,
       state: "closed",
     });
-    console.log(latestPull?.data);
     pull = latestPull?.data[0];
   } catch (error) {
     console.log("error", error.message);
@@ -130,9 +129,9 @@ const run = async () => {
           repo: context.payload?.repository?.name,
         }
       );
-      console.log(deleteBranch?.data);
+      console.log("test delete branch", deleteBranch?.data);
     } catch (error) {
-      console.log(error?.message);
+      console.log("error", error?.message);
     }
   }
 };
