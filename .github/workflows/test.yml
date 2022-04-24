@@ -30,9 +30,9 @@ jobs:
         with: 
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
-          # SLACK_WEBHOOK_REVIEW_URL: ${{secrets.SLACK_WEBHOOK_REVIEW_URL}}
           TARGET_BRANCH: main
           DESTINATION_BRANCH: develop
+          APP_NAME: Engineering-blog
 
       - name: update develop branch
         run: |
