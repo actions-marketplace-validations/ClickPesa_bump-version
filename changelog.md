@@ -1,3 +1,5 @@
+# 1.1.4
+* add checks for if branch exists before deleting branch
 # 1.1.3
 * test getting branches list
 # 1.1.2

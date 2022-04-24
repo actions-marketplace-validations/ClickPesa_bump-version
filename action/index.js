@@ -62292,7 +62292,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /***/ ((module) => {
 
 "use strict";
-module.exports = {"i8":"1.1.2"};
+module.exports = {"i8":"1.1.3"};
 
 /***/ })
 
@@ -62477,15 +62477,18 @@ const run = async () => {
         owner: context.payload?.repository?.owner?.login,
         repo: context.payload?.repository?.name,
       });
-      console.log(branches);
-      await octokit.request(
-        `DELETE /repos/${context.payload?.repository?.full_name}/git/refs/heads/${branch_to_delete}`,
-        {
-          owner: context.payload?.repository?.owner?.login,
-          repo: context.payload?.repository?.name,
-        }
-      );
-      console.log("branch deleted successfully");
+      console.log(branches?.data?.find((el) => el?.name === branch_to_delete));
+      // if exists delete
+      if (branches?.data?.find((el) => el?.name === branch_to_delete)) {
+        await octokit.request(
+          `DELETE /repos/${context.payload?.repository?.full_name}/git/refs/heads/${branch_to_delete}`,
+          {
+            owner: context.payload?.repository?.owner?.login,
+            repo: context.payload?.repository?.name,
+          }
+        );
+        console.log("branch deleted successfully");
+      }
     } catch (error) {
       console.log("error", error?.message);
     }
