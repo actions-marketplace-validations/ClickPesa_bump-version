@@ -1,3 +1,7 @@
+# 1.1.0
+* test delete branch
+
+* test changelog
 # 1.0.9
 * test delete branch
 # 1.0.8
