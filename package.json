@@ -26,7 +26,9 @@
     "@octokit/core": "^3.6.0",
     "@vercel/ncc": "0.33.1",
     "axios": "^0.26.1",
-    "gulp": "^4.0.2"
+    "gulp": "^4.0.2",
+    "gulp-append-prepend": "^1.0.9",
+    "gulp-json-modify": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "7.11.6",
