@@ -62292,7 +62292,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /***/ ((module) => {
 
 "use strict";
-module.exports = {"i8":"1.1.4"};
+module.exports = {"i8":"1.1.5"};
 
 /***/ })
 
@@ -62447,7 +62447,6 @@ const run = async () => {
               ? "* " + e.commit.message
               : commits + "\n\n" + "* " + e.commit.message;
       });
-      console.log("commits", commits);
     } catch (error) {
       console.log("fetch commits", error?.message);
     }
@@ -62497,7 +62496,6 @@ const run = async () => {
     let timeString = newDate.toLocaleTimeString();
     const RELEASE_DATE = dateString + " " + timeString;
     commits = commits?.split("*").join(">");
-    console.log(commits);
     let options = {
       blocks: [
         {

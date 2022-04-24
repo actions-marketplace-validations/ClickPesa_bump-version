@@ -1,3 +1,11 @@
+# 1.1.6
+* finalize bump version actions
+
+* test the workflow
+
+* test the workflow
+
+* change base branch to main in eod
 # 1.1.5
 * etst sending slack notification for new release
 
