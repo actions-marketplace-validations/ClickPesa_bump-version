@@ -13,7 +13,7 @@ const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
 const run = async () => {
-  console.log("context", context);
+  console.log("context", context?.payload);
   // bump version
   let ver = require("../package.json").version; //version defined in the package.json file
   let splitString = ver.split(".", 3);
