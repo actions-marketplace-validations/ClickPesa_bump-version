@@ -11,7 +11,7 @@ const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
 const run = async () => {
-  console.log("run");
+  console.log("run", context?.payload);
 };
 
 run();
