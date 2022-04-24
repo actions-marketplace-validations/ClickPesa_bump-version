@@ -63,6 +63,7 @@ const run = async () => {
     let commits = "";
     console.log("whyyyyy", context.payload?.number, context.payload);
     try {
+      console.log("whyyyyy", context.payload?.number, context.payload);
       // fetch commits from pull request
       const pull_commits = await octokit.request(
         `GET /repos/${context.payload?.repository?.full_name}/pulls/${context.payload?.number}/commits`,
