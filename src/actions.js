@@ -121,6 +121,12 @@ const run = async () => {
     // delete branch
     let branch_to_delete = pull?.head?.ref;
     try {
+      // fetch branches list
+      const branches = await octokit.rest.repos.listBranches({
+        owner: context.payload?.repository?.owner?.login,
+        repo: context.payload?.repository?.name,
+      });
+      console.log(branches);
       await octokit.request(
         `DELETE /repos/${context.payload?.repository?.full_name}/git/refs/heads/${branch_to_delete}`,
         {
