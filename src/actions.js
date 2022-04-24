@@ -13,6 +13,7 @@ const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
 const run = async () => {
+  console.log("whyyyyy", context.payload?.number, context.payload);
   // bump version
   let ver = require("../package.json").version; //version defined in the package.json file
   console.log("current version: ", ver);
