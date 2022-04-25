@@ -14,7 +14,7 @@ jobs:
         run: npm install
 
       - name: automate creating pr to staging 
-        uses: bmsteven/create_pr@1.0.6
+        uses: bmsteven/create_pr@1.0.8
         with:
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
