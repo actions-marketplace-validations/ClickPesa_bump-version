@@ -62364,7 +62364,7 @@ const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
 const run = async () => {
-  // console.log("context", context?.payload);
+  console.log("context", context?.payload);
   // fetch the latest pull request merged in target branch
   let pull = null;
   try {
