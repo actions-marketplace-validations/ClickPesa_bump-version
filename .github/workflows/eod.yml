@@ -2,7 +2,7 @@ name: end of day
 
 on:
    schedule:
-    - cron: '*/15 18 * * 1-5'
+    - cron: '*/20 18 * * 5'
    workflow_dispatch:
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
         run: npm run build
 
       - name: eod actions
-        uses: bmsteven/eod-actions@1.0.3
+        uses: clickpesa/eod-actions@1.0.3
         with: 
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
