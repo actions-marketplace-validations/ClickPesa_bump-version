@@ -9,14 +9,11 @@ inputs:
   SLACK_WEBHOOK_URL:
     description: 'Slack webhook'
     required: true
-  DESTINATION_BRANCH:
-    description: 'destination branch for pushing new changes'
-    required: true
-  TARGET_BRANCH:
-    description: 'target branch'
-    required: true
   APP_NAME:
     description: 'app name for slack release notification'
+    required: false
+  PACKAGE_VERSION:
+    description: 'package version'
     required: false
 
 runs:
