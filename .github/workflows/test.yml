@@ -27,15 +27,17 @@ jobs:
           
       - name: get version
         run: |
-          export PACKAGE_VERSION=$(cat ./package.json | jq '.version' | tr -d '"') 
+          PACKAGE_VERSION=$(cat ./package.json | jq '.version' | tr -d '"') 
+          echo "::set-output name=PACKAGE_VERSION::$(cat ./package.json | jq '.version' | tr -d '"')"
           echo $PACKAGE_VERSION
+        id: version
 
       - name: Build
         run: |
           npm run build
         
       - name: test version
-        run: echo $PACKAGE_VERSION
+        run: echo ${{ steps.version.outputs.PACKAGE_VERSION }}
 
       - name: eod actions
         uses: ./
@@ -43,7 +45,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
           APP_NAME: Engineering-blog
-          PACKAGE_VERSION: cat ./package.json | jq '.version' | tr -d '"'
+          PACKAGE_VERSION: ${{ steps.version.outputs.PACKAGE_VERSION }}
 
       - name: update develop branch
         run: |
