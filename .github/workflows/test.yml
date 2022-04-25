@@ -27,8 +27,7 @@ jobs:
           
       - name: get version
         run: |
-          echo $(cat ./package.json | jq '.version' | tr -d '"') 
-          PACKAGE_VERSION=$(cat ./package.json | jq '.version' | tr -d '"') 
+          export PACKAGE_VERSION=$(cat ./package.json | jq '.version' | tr -d '"') 
           echo $PACKAGE_VERSION
 
       - name: Build
@@ -44,7 +43,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
           APP_NAME: Engineering-blog
-          PACKAGE_VERSION: echo $(cat ./package.json | jq '.version' | tr -d '"')
+          PACKAGE_VERSION: cat ./package.json | jq '.version' | tr -d '"'
 
       - name: update develop branch
         run: |
