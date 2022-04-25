@@ -28,7 +28,9 @@ jobs:
           export PACKAGE_VERSION=$(cat ./package.json | jq '.version' | tr -d '"') 
 
       - name: Build
-        run: npm run build
+        run: |
+          npm run build
+          echo $PACKAGE_VERSION
 
       - name: eod actions
         uses: ./
@@ -36,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
           APP_NAME: Engineering-blog
-          PACKAGE_VERSION: ${PACKAGE_VERSION}
+          PACKAGE_VERSION: "{$PACKAGE_VERSION}"
 
       - name: update develop branch
         run: |
