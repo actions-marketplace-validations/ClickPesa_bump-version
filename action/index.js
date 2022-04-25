@@ -62472,7 +62472,7 @@ const run = async () => {
       const branches = await octokit.rest.repos.listBranches({
         owner: context.payload?.repository?.owner?.login,
         repo: context.payload?.repository?.name,
-      }); // if exists delete
+      });
       console.log(branch_to_delete, branches);
       if (
         branches?.data?.find((el) => el?.name === branch_to_delete) &&
