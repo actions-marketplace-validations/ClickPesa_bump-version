@@ -62378,14 +62378,8 @@ const run = async () => {
       repo: context.payload?.repository?.name,
       pull_number,
     });
-    // const latestPull = await octokit.rest.pulls.list({
-    //   owner: context.payload?.repository?.owner?.login,
-    //   repo: context.payload?.repository?.name,
-    //   base: TARGET_BRANCH,
-    //   state: "closed",
-    // });
     // fetch pull request
-    console.log(latestPull);
+    console.log("latest pull request", latestPull);
     pull = latestPull?.data;
   } catch (error) {
     console.log("error", error.message);
