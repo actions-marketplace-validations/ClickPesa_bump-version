@@ -1,3 +1,7 @@
+# 1.2.0
+* improve actions workflow
+
+* add missing inputs for eod
 # 1.1.9
 * test new actions
 # 1.1.8
