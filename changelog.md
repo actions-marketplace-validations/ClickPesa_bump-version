@@ -1,3 +1,5 @@
+# 1.2.1
+* resolve issues for deployment and testing on other repos
 # 1.2.0
 * improve actions workflow
 
