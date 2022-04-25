@@ -22,6 +22,9 @@ jobs:
       - name: Build
         run: npm install
 
+      - name: install jq
+        run: npm install
+
       - name: Build
         run: npm run build
 
@@ -30,9 +33,8 @@ jobs:
         with: 
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
-          TARGET_BRANCH: main
-          DESTINATION_BRANCH: develop
           APP_NAME: Engineering-blog
+          PACKAGE_VERSION: $(cat ./package.json | jq '.version' | tr -d '"')
 
       - name: update develop branch
         run: |
