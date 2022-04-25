@@ -7,12 +7,13 @@ const gap = require("gulp-append-prepend");
 
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 const SLACK_WEBHOOK_URL = core.getInput("SLACK_WEBHOOK_URL");
-const TARGET_BRANCH = core.getInput("TARGET_BRANCH");
 const APP_NAME = core.getInput("APP_NAME");
+const PACKAGE_VERSION = core.getInput("PACKAGE_VERSION");
 const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
 const run = async () => {
+  console.log(PACKAGE_VERSION);
   // fetch the latest pull request merged in target branch
   let pull = null;
   // get pull number
@@ -20,7 +21,6 @@ const run = async () => {
     ?.split(" ")
     ?.find((o) => o?.includes("#"))
     ?.split("#")[1];
-  console.log("pull number", pull_number);
   try {
     const latestPull = await octokit.rest.pulls.get({
       owner: context.payload?.repository?.owner?.login,
@@ -28,15 +28,13 @@ const run = async () => {
       pull_number,
     });
     // fetch pull request
-    console.log("latest pull request", latestPull);
     pull = latestPull?.data;
   } catch (error) {
     console.log("error", error.message);
   }
   // bump version
-  let ver = require("../package.json").version; //version defined in the package.json file
-  console.log("current version", ver);
-  let splitString = ver.split(".", 3);
+  // let ver = require("../package.json").version; //version defined in the package.json file
+  let splitString = PACKAGE_VERSION.split(".", 3);
 
   let majorVersion = splitString[0].split('"', 1);
   let minorVersion = splitString[1].split('"', 1);
@@ -59,15 +57,6 @@ const run = async () => {
       splitString[0] = String(majorNumber);
     }
   }
-  console.log(
-    "splitted version",
-    patchNumber,
-    minorNumber,
-    majorNumber,
-    majorVersion,
-    minorVersion,
-    patchVersion
-  );
 
   let new_version = splitString.join(".");
   console.log("new version", new_version);
@@ -101,7 +90,6 @@ const run = async () => {
       );
 
       pull_commits?.data?.forEach((e, i) => {
-        console.log("commit details", e);
         if (
           !e?.commit?.message.includes("Merge") &&
           !e?.commit?.message.includes("Merged") &&
@@ -113,11 +101,9 @@ const run = async () => {
               ? "* " + e.commit.message
               : commits + "\n\n" + "* " + e.commit.message;
       });
-      console.log("pull commits", pull_commits);
     } catch (error) {
       console.log("fetch commits", error?.message);
     }
-    console.log("commits", commits);
     try {
       if (commits != "") {
         gulp

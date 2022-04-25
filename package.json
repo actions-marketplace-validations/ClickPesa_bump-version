@@ -1,6 +1,6 @@
 {
   "name": "bump-version",
-  "version": "1.0.0",
+  "version": "1.2.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,8 @@
     "axios": "^0.26.1",
     "gulp": "^4.0.2",
     "gulp-append-prepend": "^1.0.9",
-    "gulp-json-modify": "^1.0.2"
+    "gulp-json-modify": "^1.0.2",
+    "jq": "^1.7.2"
   },
   "devDependencies": {
     "@babel/core": "7.11.6",
