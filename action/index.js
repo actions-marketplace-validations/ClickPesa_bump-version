@@ -62484,7 +62484,13 @@ const run = async () => {
         repo: context.payload?.repository?.name,
       }); // if exists delete
       console.log(branch_to_delete, branches);
-      if (branches?.data?.find((el) => el?.name === branch_to_delete)) {
+      if (
+        branches?.data?.find((el) => el?.name === branch_to_delete) &&
+        branch_to_delete !== "develop" &&
+        branch_to_delete !== "staging" &&
+        branch_to_delete !== "master" &&
+        branch_to_delete !== "main"
+      ) {
         await octokit.request(
           `DELETE /repos/${context.payload?.repository?.full_name}/git/refs/heads/${branch_to_delete}`,
           {

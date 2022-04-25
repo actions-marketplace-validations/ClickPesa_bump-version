@@ -35,6 +35,7 @@ const run = async () => {
   }
   // bump version
   let ver = require("../package.json").version; //version defined in the package.json file
+  console.log("current version", ver);
   let splitString = ver.split(".", 3);
 
   let majorVersion = splitString[0].split('"', 1);
@@ -58,8 +59,18 @@ const run = async () => {
       splitString[0] = String(majorNumber);
     }
   }
+  console.log(
+    "splitted version",
+    patchNumber,
+    minorNumber,
+    majorNumber,
+    majorVersion,
+    minorVersion,
+    patchVersion
+  );
 
   let new_version = splitString.join(".");
+  console.log("new version", new_version);
   // save version
   if (new_version) {
     try {
@@ -90,6 +101,7 @@ const run = async () => {
       );
 
       pull_commits?.data?.forEach((e, i) => {
+        console.log("commit details", e);
         if (
           !e?.commit?.message.includes("Merge") &&
           !e?.commit?.message.includes("Merged") &&
@@ -133,7 +145,13 @@ const run = async () => {
         repo: context.payload?.repository?.name,
       }); // if exists delete
       console.log(branch_to_delete, branches);
-      if (branches?.data?.find((el) => el?.name === branch_to_delete)) {
+      if (
+        branches?.data?.find((el) => el?.name === branch_to_delete) &&
+        branch_to_delete !== "develop" &&
+        branch_to_delete !== "staging" &&
+        branch_to_delete !== "master" &&
+        branch_to_delete !== "main"
+      ) {
         await octokit.request(
           `DELETE /repos/${context.payload?.repository?.full_name}/git/refs/heads/${branch_to_delete}`,
           {
