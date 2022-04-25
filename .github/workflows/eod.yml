@@ -1,4 +1,4 @@
-name: eod
+name: end of day
 
 on:
    schedule:
