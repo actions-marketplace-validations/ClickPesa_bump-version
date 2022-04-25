@@ -23,7 +23,9 @@ jobs:
         run: npm install
 
       - name: install jq
-        run: npm install
+        run: |
+          npm install jq
+          echo $(cat ./package.json | jq '.version' | tr -d '"')
 
       - name: Build
         run: npm run build
