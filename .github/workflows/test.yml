@@ -25,7 +25,7 @@ jobs:
       - name: install jq
         run: |
           npm install jq
-          echo $(cat ./package.json | jq '.version' | tr -d '"')
+          echo $(cat ./package.json | jq '.version' | tr -d '"') 
 
       - name: Build
         run: npm run build
@@ -36,7 +36,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
           APP_NAME: Engineering-blog
-          PACKAGE_VERSION: $(cat ./package.json | jq '.version' | tr -d '"')
+          PACKAGE_VERSION: echo $(cat ./package.json | jq '.version' | tr -d '"')
 
       - name: update develop branch
         run: |
