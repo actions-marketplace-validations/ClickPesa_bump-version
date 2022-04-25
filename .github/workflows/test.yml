@@ -1,4 +1,4 @@
-name: on pr to default branch
+name: on merging to default branch
 
 on:
    push:

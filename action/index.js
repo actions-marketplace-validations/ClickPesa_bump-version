@@ -62364,17 +62364,23 @@ const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
 const run = async () => {
-  console.log("context", context?.payload);
   // fetch the latest pull request merged in target branch
   let pull = null;
+  // get pull number
+  let pull_number = context.payload?.head_commit?.message
+    ?.split(" ")
+    ?.find((o) => o?.includes("#"))
+    ?.split("#")[1];
+  console.log("pull number", pull_number);
   try {
-    const latestPull = await octokit.rest.pulls.list({
+    const latestPull = await octokit.rest.pulls.get({
       owner: context.payload?.repository?.owner?.login,
       repo: context.payload?.repository?.name,
-      base: TARGET_BRANCH,
-      state: "closed",
+      pull_number,
     });
-    pull = latestPull?.data[0];
+    // fetch pull request
+    console.log("latest pull request", latestPull);
+    pull = latestPull?.data;
   } catch (error) {
     console.log("error", error.message);
   }
@@ -62405,7 +62411,6 @@ const run = async () => {
   }
 
   let new_version = splitString.join(".");
-  // process.env.VERSION = splitString.join(".");
   // save version
   if (new_version) {
     try {
@@ -62447,9 +62452,11 @@ const run = async () => {
               ? "* " + e.commit.message
               : commits + "\n\n" + "* " + e.commit.message;
       });
+      console.log("pull commits", pull_commits);
     } catch (error) {
       console.log("fetch commits", error?.message);
     }
+    console.log("commits", commits);
     try {
       if (commits != "") {
         gulp
