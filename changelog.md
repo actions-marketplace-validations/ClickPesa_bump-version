@@ -1,3 +1,5 @@
+# 1.1.8
+* test new workflow
 # 1.1.7
 * chenge action name
 # 1.1.6
