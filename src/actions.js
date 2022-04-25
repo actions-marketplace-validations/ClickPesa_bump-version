@@ -13,7 +13,7 @@ const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
 const run = async () => {
-  console.log(PACKAGE_VERSION);
+  console.log("old version", PACKAGE_VERSION);
   // fetch the latest pull request merged in target branch
   let pull = null;
   // get pull number
