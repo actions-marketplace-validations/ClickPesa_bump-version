@@ -24,5 +24,7 @@ jobs:
           SLACK_WEBHOOK_REVIEW_URL: ${{secrets.SLACK_WEBHOOK_REVIEW_URL}}
           TARGET_BRANCH: staging
           DESTINATION_BRANCH: main
+          TEAM_LEAD_ID: ${{secrets.TEAM_LEAD_ID}}
+          TECH_LEAD_ID: ${{secrets.TECH_LEAD_ID}}
           REPO_OWNER: bmsteven
           REPO_NAME: bump-version
