@@ -62359,12 +62359,12 @@ const gap = __nccwpck_require__(21894);
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 const SLACK_WEBHOOK_URL = core.getInput("SLACK_WEBHOOK_URL");
 const TARGET_BRANCH = core.getInput("TARGET_BRANCH");
-const DESTINATION_BRANCH = core.getInput("DESTINATION_BRANCH");
+const APP_NAME = core.getInput("APP_NAME");
 const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 
 const run = async () => {
-  // console.log("context", context?.payload);
+  console.log("context", context?.payload);
   // fetch the latest pull request merged in target branch
   let pull = null;
   try {
@@ -62447,13 +62447,11 @@ const run = async () => {
               ? "* " + e.commit.message
               : commits + "\n\n" + "* " + e.commit.message;
       });
-      console.log("commits", commits);
     } catch (error) {
       console.log("fetch commits", error?.message);
     }
     try {
       if (commits != "") {
-        console.log("here");
         gulp
           .src(["./changelog.md"])
           .pipe(gap.prependText(commits))
@@ -62473,23 +62471,85 @@ const run = async () => {
     // delete branch
     let branch_to_delete = pull?.head?.ref;
     try {
-      await octokit.request(
-        `DELETE /repos/${context.payload?.repository?.full_name}/git/refs/heads/${branch_to_delete}`,
-        {
-          owner: context.payload?.repository?.owner?.login,
-          repo: context.payload?.repository?.name,
-        }
-      );
-      console.log("branch deleted successfully");
+      // fetch branches list
+      const branches = await octokit.rest.repos.listBranches({
+        owner: context.payload?.repository?.owner?.login,
+        repo: context.payload?.repository?.name,
+      }); // if exists delete
+      if (branches?.data?.find((el) => el?.name === branch_to_delete)) {
+        await octokit.request(
+          `DELETE /repos/${context.payload?.repository?.full_name}/git/refs/heads/${branch_to_delete}`,
+          {
+            owner: context.payload?.repository?.owner?.login,
+            repo: context.payload?.repository?.name,
+          }
+        );
+        console.log("branch deleted successfully");
+      }
     } catch (error) {
       console.log("error", error?.message);
     }
+    // send slack notification
+    let newDate = new Date();
+    newDate.setTime(new Date(newDate).getTime());
+    let dateString = newDate.toDateString();
+    let timeString = newDate.toLocaleTimeString();
+    const RELEASE_DATE = dateString + " " + timeString;
+    commits = commits?.split("*").join(">");
+    let options = {
+      blocks: [
+        {
+          type: "header",
+          text: {
+            type: "plain_text",
+            text: `🚀 New version released on *${
+              APP_NAME ?? "Engineering-blog"
+            }*`,
+            emoji: true,
+          },
+        },
+        {
+          type: "context",
+          elements: [
+            {
+              text: ` *${
+                APP_NAME ?? "Engineering-blog"
+              }*  |  *${RELEASE_DATE}* `,
+              type: "mrkdwn",
+            },
+          ],
+        },
+        {
+          type: "divider",
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `*<https://github.com/${context.payload?.repository?.full_name}/ | ${new_version} >*`,
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `${commits}`,
+          },
+        },
+      ],
+    };
+    axios
+      .post(SLACK_WEBHOOK_URL, JSON.stringify(options))
+      .then((response) => {
+        console.log("SUCCEEDED: Sent slack webhook", response.data);
+      })
+      .catch((error) => {
+        console.log("FAILED: Send slack webhook", error);
+      });
   }
 };
 
 run();
-
-// curl -s -X DELETE -u username:${{secrets.GITHUB_TOKEN}} https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ github.head_ref }}
 
 })();
 

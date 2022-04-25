@@ -1,8 +1,9 @@
-name: on pr to staging
+name: eod
 
 on:
-   pull_request:
-     branches: [ staging ]
+   schedule:
+    - cron: '*/15 18 * * 1-5'
+   workflow_dispatch:
 
 jobs:
   build:
@@ -16,7 +17,7 @@ jobs:
         run: npm run build
 
       - name: eod actions
-        uses: bmsteven/eod-actions@1.0.2
+        uses: bmsteven/eod-actions@1.0.3
         with: 
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
