@@ -23,14 +23,17 @@ jobs:
         run: npm install
 
       - name: install jq
-        run: |
-          npm install jq
-          PACKAGE_VERSION=$(cat ./package.json | jq '.version' | tr -d '"') 
+        run: npm install jq
+          
+      - name: get version
+        run: PACKAGE_VERSION=$(cat ./package.json | jq '.version' | tr -d '"') 
 
       - name: Build
         run: |
           npm run build
-          echo $PACKAGE_VERSION
+        
+      - name: test version
+        run: echo $PACKAGE_VERSION
 
       - name: eod actions
         uses: ./
@@ -38,7 +41,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
           APP_NAME: Engineering-blog
-          PACKAGE_VERSION: "current_version=${PACKAGE_VERSION}"
+          PACKAGE_VERSION: "--build-arg current_version=${PACKAGE_VERSION}"
 
       - name: update develop branch
         run: |
