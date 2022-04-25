@@ -1,3 +1,7 @@
+# 1.2.2
+* add extra checks to debug bump version when run on another repo
+
+* add build file
 # 1.2.1
 * resolve issues for deployment and testing on other repos
 # 1.2.0
