@@ -11,6 +11,12 @@ inputs:
   DELETE_BRANCH:
     description: 'delete branch condition'
     required: false
+  CHANGELOG_PATH:
+    description: 'changelog file path'
+    required: false
+  PACKAGE_JSON_PATH:
+    description: 'package.json file path'
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

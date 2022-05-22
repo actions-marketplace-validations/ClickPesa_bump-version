@@ -7,6 +7,8 @@ import gap from 'gulp-append-prepend'
 const GITHUB_TOKEN: any = core.getInput('GITHUB_TOKEN')
 const PACKAGE_VERSION: any = core.getInput('PACKAGE_VERSION')
 const DELETE_BRANCH: any = core.getInput('DELETE_BRANCH')
+const CHANGELOG_PATH: any = core.getInput('CHANGELOG_PATH')
+const PACKAGE_JSON_PATH: any = core.getInput('PACKAGE_JSON_PATH')
 const octokit = github.getOctokit(GITHUB_TOKEN)
 const {context = {}}: any = github
 
@@ -27,8 +29,7 @@ const run = async () => {
     // fetch pull request
     pull = latestPull?.data
   } catch (error: any) {
-    // if (error instanceof Error) core.setFailed(error.message)
-    core.info('error getting pr')
+    if (error instanceof Error) core.setFailed(error.message)
   }
   // bump version
   // let ver = require("../package.json").version; //version defined in the package.json file
@@ -60,7 +61,7 @@ const run = async () => {
   if (new_version) {
     try {
       gulp
-        .src(['./package.json'])
+        .src([PACKAGE_JSON_PATH ?? './package.json'])
         .pipe(
           jsonModify({
             key: 'version',
@@ -69,8 +70,7 @@ const run = async () => {
         )
         .pipe(gulp.dest('./'))
     } catch (error: any) {
-      // if (error instanceof Error) core.setFailed(error.message)
-      core.info('erro updating vesrion')
+      if (error instanceof Error) core.setFailed(error.message)
     }
 
     // update changelog
@@ -104,20 +104,19 @@ const run = async () => {
     try {
       if (commits != '') {
         gulp
-          .src(['./changelog.md'])
+          .src([CHANGELOG_PATH ?? './changelog.md'])
           .pipe(gap.prependText(commits))
           .pipe(gap.prependText(`# ${new_version}`))
           .pipe(gulp.dest('./'))
       } else {
         gulp
-          .src(['./changelog.md'])
+          .src([CHANGELOG_PATH ?? './changelog.md'])
           .pipe(gap.prependText('* No message for these changes'))
           .pipe(gap.prependText(`# ${new_version}`))
           .pipe(gulp.dest('./'))
       }
     } catch (error: any) {
-      // if (error instanceof Error) core.setFailed(error.message)
-      core.info('erro updating vesrion to changelog')
+      if (error instanceof Error) core.setFailed(error.message)
     }
     // delete branch
     if (DELETE_BRANCH) {

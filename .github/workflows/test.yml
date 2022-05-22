@@ -46,6 +46,8 @@ jobs:
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           PACKAGE_VERSION: ${{ steps.version.outputs.PACKAGE_VERSION }}
           DELETE_BRANCH: false
+          CHANGELOG_PATH: ./CHANGELOG.md
+          PACKAGE_JSON_PATH: .package.json
       - name: test outputs
         run: |
           echo "The author was ${{ steps.bump_version.outputs.body }}"
