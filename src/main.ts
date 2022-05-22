@@ -1,8 +1,8 @@
 import * as github from '@actions/github'
 import * as core from '@actions/core'
-import * as gulp from 'gulp'
-import * as jsonModify from 'gulp-json-modify'
-import * as gap from 'gulp-append-prepend'
+import gulp from 'gulp'
+import jsonModify from 'gulp-json-modify'
+import gap from 'gulp-append-prepend'
 
 const GITHUB_TOKEN: any = core.getInput('GITHUB_TOKEN')
 const PACKAGE_VERSION: any = core.getInput('PACKAGE_VERSION')
