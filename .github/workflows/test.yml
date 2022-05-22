@@ -50,13 +50,13 @@ jobs:
           PACKAGE_JSON_PATH: ./package.json
       - name: test outputs
         run: |
-          echo "The author was ${{ steps.bump_version.outputs.body }}"
-          echo "The author was ${{ steps.bump_version.outputs.new_version }}"
+          echo "what changed was ${{ steps.bump_version.outputs.body }}"
+          echo "The new version was ${{ steps.bump_version.outputs.new_version }}"
 
       - name: update develop branch
         run: |
           git add package.json
-          git add changelog.md
+          git add CHANGELOG.md
           git add action
           git commit -m "Skip CI"
           git push
