@@ -35,9 +35,6 @@ jobs:
       - name: Build
         run: |
           yarn run all
-        
-      - name: test version
-        run: echo ${{ steps.version.outputs.PACKAGE_VERSION }}
 
       - name: bump-version
         id: bump_version
