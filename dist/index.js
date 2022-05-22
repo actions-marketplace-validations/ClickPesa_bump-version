@@ -38,15 +38,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(95438));
 const core = __importStar(__nccwpck_require__(42186));
-const gulp = __importStar(__nccwpck_require__(65033));
-const jsonModify = __importStar(__nccwpck_require__(84226));
-const gap = __importStar(__nccwpck_require__(21894));
+const gulp_1 = __importDefault(__nccwpck_require__(65033));
+const gulp_json_modify_1 = __importDefault(__nccwpck_require__(84226));
+const gulp_append_prepend_1 = __importDefault(__nccwpck_require__(21894));
 const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 const PACKAGE_VERSION = core.getInput('PACKAGE_VERSION');
 const DELETE_BRANCH = core.getInput('DELETE_BRANCH');
+const CHANGELOG_PATH = core.getInput('CHANGELOG_PATH');
+const PACKAGE_JSON_PATH = core.getInput('PACKAGE_JSON_PATH');
 const octokit = github.getOctokit(GITHUB_TOKEN);
 const { context = {} } = github;
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -97,13 +102,13 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     // save version
     if (new_version) {
         try {
-            gulp
-                .src(['./package.json'])
-                .pipe(jsonModify({
+            gulp_1.default
+                .src([PACKAGE_JSON_PATH !== null && PACKAGE_JSON_PATH !== void 0 ? PACKAGE_JSON_PATH : './package.json'])
+                .pipe((0, gulp_json_modify_1.default)({
                 key: 'version',
                 value: new_version
             }))
-                .pipe(gulp.dest('./'));
+                .pipe(gulp_1.default.dest('./'));
         }
         catch (error) {
             if (error instanceof Error)
@@ -135,18 +140,18 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         }
         try {
             if (commits != '') {
-                gulp
-                    .src(['./changelog.md'])
-                    .pipe(gap.prependText(commits))
-                    .pipe(gap.prependText(`# ${new_version}`))
-                    .pipe(gulp.dest('./'));
+                gulp_1.default
+                    .src([CHANGELOG_PATH !== null && CHANGELOG_PATH !== void 0 ? CHANGELOG_PATH : './changelog.md'])
+                    .pipe(gulp_append_prepend_1.default.prependText(commits))
+                    .pipe(gulp_append_prepend_1.default.prependText(`# ${new_version}`))
+                    .pipe(gulp_1.default.dest('./'));
             }
             else {
-                gulp
-                    .src(['./changelog.md'])
-                    .pipe(gap.prependText('* No message for these changes'))
-                    .pipe(gap.prependText(`# ${new_version}`))
-                    .pipe(gulp.dest('./'));
+                gulp_1.default
+                    .src([CHANGELOG_PATH !== null && CHANGELOG_PATH !== void 0 ? CHANGELOG_PATH : './changelog.md'])
+                    .pipe(gulp_append_prepend_1.default.prependText('* No message for these changes'))
+                    .pipe(gulp_append_prepend_1.default.prependText(`# ${new_version}`))
+                    .pipe(gulp_1.default.dest('./'));
             }
         }
         catch (error) {
