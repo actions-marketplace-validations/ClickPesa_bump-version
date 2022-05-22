@@ -1,25 +1,16 @@
-name: 'bum app version'
-description: 'automate merge and pull request creation in intermediate branch'
-author: 'Benedict Steven'
-
+name: 'Bump app version'
+description: ''
+author: 'Benedict'
 inputs:
   GITHUB_TOKEN:
     description: 'GitHub Token'
     required: true
-  SLACK_WEBHOOK_URL:
-    description: 'Slack webhook'
-    required: true
-  APP_NAME:
-    description: 'app name for slack release notification'
-    required: false
   PACKAGE_VERSION:
     description: 'package version'
     required: false
-
+  DELETE_BRANCH:
+    description: 'delete branch condition'
+    required: false
 runs:
   using: 'node16'
-  main: 'action/index.js'
-
-branding:
-  icon: 'package'
-  color: 'gray-dark'
+  main: 'dist/index.js'
