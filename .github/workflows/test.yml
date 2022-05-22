@@ -39,13 +39,13 @@ jobs:
       - name: test version
         run: echo ${{ steps.version.outputs.PACKAGE_VERSION }}
 
-      - name: eod actions
+      - name: bump-version
         id: bump_version
         uses: ./
         with: 
           GITHUB_TOKEN: ${{secrets.TOKEN}}
           PACKAGE_VERSION: ${{ steps.version.outputs.PACKAGE_VERSION }}
-          DELETE_BRANCH: true
+          DELETE_BRANCH: false
       - name: test outputs
         run: |
           echo "The author was ${{ steps.bump_version.outputs.body }}"
