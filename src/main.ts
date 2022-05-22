@@ -27,7 +27,8 @@ const run = async () => {
     // fetch pull request
     pull = latestPull?.data
   } catch (error: any) {
-    if (error instanceof Error) core.setFailed(error.message)
+    // if (error instanceof Error) core.setFailed(error.message)
+    core.info('error getting pr')
   }
   // bump version
   // let ver = require("../package.json").version; //version defined in the package.json file
@@ -68,7 +69,8 @@ const run = async () => {
         )
         .pipe(gulp.dest('./'))
     } catch (error: any) {
-      if (error instanceof Error) core.setFailed(error.message)
+      // if (error instanceof Error) core.setFailed(error.message)
+      core.info('erro updating vesrion')
     }
 
     // update changelog
@@ -114,7 +116,8 @@ const run = async () => {
           .pipe(gulp.dest('./'))
       }
     } catch (error: any) {
-      if (error instanceof Error) core.setFailed(error.message)
+      // if (error instanceof Error) core.setFailed(error.message)
+      core.info('erro updating vesrion to changelog')
     }
     // delete branch
     if (DELETE_BRANCH) {
