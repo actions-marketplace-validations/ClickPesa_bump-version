@@ -6,6 +6,29 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,20 +38,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const github_1 = __importDefault(__nccwpck_require__(95438));
-const core_1 = __importDefault(__nccwpck_require__(42186));
-const gulp_1 = __importDefault(__nccwpck_require__(65033));
-const gulp_json_modify_1 = __importDefault(__nccwpck_require__(84226));
-const gulp_append_prepend_1 = __importDefault(__nccwpck_require__(21894));
-const GITHUB_TOKEN = core_1.default.getInput('GITHUB_TOKEN');
-const PACKAGE_VERSION = core_1.default.getInput('PACKAGE_VERSION');
-const DELETE_BRANCH = core_1.default.getInput('DELETE_BRANCH');
-const octokit = github_1.default.getOctokit(GITHUB_TOKEN);
-const { context = {} } = github_1.default;
+const github = __importStar(__nccwpck_require__(95438));
+const core = __importStar(__nccwpck_require__(42186));
+const gulp = __importStar(__nccwpck_require__(65033));
+const jsonModify = __importStar(__nccwpck_require__(84226));
+const gap = __importStar(__nccwpck_require__(21894));
+const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
+const PACKAGE_VERSION = core.getInput('PACKAGE_VERSION');
+const DELETE_BRANCH = core.getInput('DELETE_BRANCH');
+const octokit = github.getOctokit(GITHUB_TOKEN);
+const { context = {} } = github;
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7;
     // fetch the latest pull request merged in target branch
@@ -46,7 +66,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         if (error instanceof Error)
-            core_1.default.setFailed(error.message);
+            core.setFailed(error.message);
     }
     // bump version
     // let ver = require("../package.json").version; //version defined in the package.json file
@@ -77,17 +97,17 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     // save version
     if (new_version) {
         try {
-            gulp_1.default
+            gulp
                 .src(['./package.json'])
-                .pipe((0, gulp_json_modify_1.default)({
+                .pipe(jsonModify({
                 key: 'version',
                 value: new_version
             }))
-                .pipe(gulp_1.default.dest('./'));
+                .pipe(gulp.dest('./'));
         }
         catch (error) {
             if (error instanceof Error)
-                core_1.default.setFailed(error.message);
+                core.setFailed(error.message);
         }
         // update changelog
         let commits = '';
@@ -111,27 +131,27 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
         catch (error) {
-            core_1.default.info('No commits found for this PR');
+            core.info('No commits found for this PR');
         }
         try {
             if (commits != '') {
-                gulp_1.default
+                gulp
                     .src(['./changelog.md'])
-                    .pipe(gulp_append_prepend_1.default.prependText(commits))
-                    .pipe(gulp_append_prepend_1.default.prependText(`# ${new_version}`))
-                    .pipe(gulp_1.default.dest('./'));
+                    .pipe(gap.prependText(commits))
+                    .pipe(gap.prependText(`# ${new_version}`))
+                    .pipe(gulp.dest('./'));
             }
             else {
-                gulp_1.default
+                gulp
                     .src(['./changelog.md'])
-                    .pipe(gulp_append_prepend_1.default.prependText('* No message for these changes'))
-                    .pipe(gulp_append_prepend_1.default.prependText(`# ${new_version}`))
-                    .pipe(gulp_1.default.dest('./'));
+                    .pipe(gap.prependText('* No message for these changes'))
+                    .pipe(gap.prependText(`# ${new_version}`))
+                    .pipe(gulp.dest('./'));
             }
         }
         catch (error) {
             if (error instanceof Error)
-                core_1.default.setFailed(error.message);
+                core.setFailed(error.message);
         }
         // delete branch
         if (DELETE_BRANCH) {
@@ -151,16 +171,16 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                         owner: (_5 = (_4 = (_3 = context.payload) === null || _3 === void 0 ? void 0 : _3.repository) === null || _4 === void 0 ? void 0 : _4.owner) === null || _5 === void 0 ? void 0 : _5.login,
                         repo: (_7 = (_6 = context.payload) === null || _6 === void 0 ? void 0 : _6.repository) === null || _7 === void 0 ? void 0 : _7.name
                     });
-                    core_1.default.info('branch deleted successfully');
+                    core.info('branch deleted successfully');
                 }
             }
             catch (error) {
-                core_1.default.info('failed to delete branch');
+                core.info('failed to delete branch');
             }
         }
         commits = commits === null || commits === void 0 ? void 0 : commits.split('*').join('>');
-        core_1.default.setOutput('body', commits);
-        core_1.default.setOutput('new_version', new_version);
+        core.setOutput('body', commits);
+        core.setOutput('new_version', new_version);
     }
 });
 run();
