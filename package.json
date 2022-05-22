@@ -1,6 +1,6 @@
 {
   "name": "bump-version",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Bump app version",
   "main": "lib/main.js",
@@ -29,7 +29,8 @@
     "@actions/github": "^5.0.1",
     "gulp": "^4.0.2",
     "gulp-append-prepend": "^1.0.9",
-    "gulp-json-modify": "^1.0.2"
+    "gulp-json-modify": "^1.0.2",
+    "jq": "^1.7.2"
   },
   "devDependencies": {
     "@types/node": "^16.10.5",
